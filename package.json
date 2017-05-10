@@ -14,6 +14,7 @@
     "webpack": "^2.2.1"
   },
   "keywords": [],
+  "license": "MIT",
   "main": "index.js",
   "name": "skeleton",
   "scripts": {
