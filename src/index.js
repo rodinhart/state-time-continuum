@@ -13,15 +13,18 @@ const render = state => IO(() => reactDom.render(
   document.getElementById("main") /* global document */
 ))
 
-// app :: (State, IO ()) -> Task () (State, IO ())
-const app = charge =>
-  Task.listen(charge[1]).map(brief => {
-    const newCharge = App.reduce(brief)(charge[0])
-    var io = newCharge[1]
+// app :: Effect -> Task () Effect
+const app = effect =>
+  Task.listen(effect.io).map(cause => {
+    const newEffect = App.reduce(cause)(effect.state)
+    var io = newEffect.io
 
-    io = io ? io.bind(() => render(newCharge[0])) : render(newCharge[0])
+    io = io ? io.bind(() => render(newEffect.state)) : render(newEffect.state)
 
-    return [newCharge[0], io]
+    return {
+      io: io,
+      state: newEffect.state
+    }
   }).bind(app)
 
 // go
@@ -43,4 +46,7 @@ const state = {
   }
 }
 
-app([state, render(state)]).fork(console.log, console.log)
+app({
+  io: render(state),
+  state: state
+}).fork(console.log, console.log)

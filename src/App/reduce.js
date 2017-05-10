@@ -4,6 +4,7 @@
 const Lens = require("../lens.js")
 const Option = require("../Option/index.js")
 
-// reduce :: Brief -> State -> (State, IO ())
-module.exports = brief => state =>
-  [Lens.over(brief[1])(Option.reduce(brief[0]))(state)]
+// reduce :: Cause -> State -> Effect
+module.exports = cause => state => ({
+  state: Lens.over(cause.lens)(Option.reduce(cause.action))(state)
+})

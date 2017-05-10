@@ -3,13 +3,16 @@
 var dispatch
 
 // handle :: Lens -> Action -> ()
-const handle = lens => action => dispatch([action, lens])
+const handle = lens => action => dispatch({
+  action: action,
+  lens: lens
+})
 
-// listen :: IO () -> Task () (Action, Lens)
+// listen :: IO () -> Task () Cause
 const listen = io => Task((rej, res) => {
-  dispatch = brief => {
+  dispatch = cause => {
     dispatch = undefined
-    res(brief)
+    res(cause)
   }
 
   if (io) io.unsafe()
