@@ -2,6 +2,7 @@
 
 // Imports.
 const App = require("./App/index.js")
+const Effect = require("./Effect.js")
 const IO = require("./IO.js")
 const React = require("react")
 const reactDom = require("react-dom")
@@ -21,10 +22,7 @@ const app = effect =>
 
     io = io ? io.bind(() => render(newEffect.state)) : render(newEffect.state)
 
-    return {
-      io: io,
-      state: newEffect.state
-    }
+    return Effect(newEffect.state, io)
   }).bind(app)
 
 // go
@@ -46,7 +44,4 @@ const state = {
   }
 }
 
-app({
-  io: render(state),
-  state: state
-}).fork(console.log, console.log)
+app(Effect(state, render(state))).fork(console.log, console.log)

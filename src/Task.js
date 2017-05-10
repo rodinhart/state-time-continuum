@@ -1,12 +1,11 @@
 "use strict"
 
+const Cause = require("./Cause.js")
+
 var dispatch
 
 // handle :: Lens -> Action -> ()
-const handle = lens => action => dispatch({
-  action: action,
-  lens: lens
-})
+const handle = lens => action => dispatch(Cause(action, lens))
 
 // listen :: IO () -> Task () Cause
 const listen = io => Task((rej, res) => {
