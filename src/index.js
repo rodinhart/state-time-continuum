@@ -2,11 +2,11 @@
 
 // Imports.
 const App = require("./App/index.js")
+const Cause = require("./Cause.js")
 const Effect = require("./Effect.js")
 const IO = require("./IO.js")
 const React = require("react")
 const reactDom = require("react-dom")
-const Task = require("./Task.js")
 
 // render :: State -> IO ()
 const render = state => IO(() => reactDom.render(
@@ -16,7 +16,7 @@ const render = state => IO(() => reactDom.render(
 
 // app :: Effect -> Task () Effect
 const app = effect =>
-  Task.listen(effect.io).map(cause => {
+  Cause.listen(effect.io).map(cause => {
     const newEffect = App.reduce(cause)(effect.state)
     var io = newEffect.io
 
