@@ -11,7 +11,7 @@ const Cause = (action, lens) => ({
 var dispatch
 
 // handle :: Lens -> Action -> ()
-const handle = lens => action => dispatch(Cause(action, lens))
+const handle = lens => action => dispatch(Cause(action, lens)) // split into handle and handleAt
 
 // listen :: IO () -> Task () Cause
 const listen = io => Task((rej, res) => {
