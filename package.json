@@ -16,7 +16,7 @@
   "keywords": [],
   "license": "MIT",
   "main": "index.js",
-  "name": "skeleton",
+  "name": "state-time-continuum",
   "scripts": {
     "start": "webpack -w",
     "test": "mocha",
