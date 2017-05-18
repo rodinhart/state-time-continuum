@@ -14,19 +14,8 @@ const render = state => IO(() => reactDom.render(
   document.getElementById("main") /* global document */
 ))
 
-// app :: Effect -> Task () Effect
-const app = effect =>
-  Cause.listen(effect.io).map(cause => {
-    const newEffect = App.reduce(cause)(effect.state)
-    var io = newEffect.io
-
-    io = io ? io.bind(() => render(newEffect.state)) : render(newEffect.state)
-
-    return Effect(newEffect.state, io)
-  }).bind(app)
-
-// go
-const state = {
+// app :: Task String (Effect State)
+const app = Cause.app(render)(App.reduce)({
   optionA: {
     label: "Option A",
     enabled: false
@@ -42,6 +31,7 @@ const state = {
 
     return r.length ? r.join(" & ") : "None"
   }
-}
+})
 
-app(Effect(state, render(state))).fork(console.log, console.log)
+// go
+app.fork(console.log, console.log)
