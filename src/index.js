@@ -4,7 +4,7 @@
 const App = require("./App/index.js")
 const Cause = require("./Cause.js")
 const Effect = require("./Effect.js")
-const IO = require("./IO.js")
+const IO = require("data-control").IO
 const React = require("react")
 const reactDom = require("react-dom")
 

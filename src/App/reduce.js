@@ -2,7 +2,7 @@
 
 // Imports.
 const Effect = require("../Effect.js")
-const Lens = require("../lens.js")
+const Lens = require("data-control").Lens
 const Option = require("../Option/index.js")
 
 // reduce :: Cause -> State -> Effect

@@ -3,7 +3,7 @@
 // Imports.
 const Cause = require("../Cause.js")
 const Form = require("antd/lib/form"); const { Item } = Form
-const Lens = require("../lens.js")
+const Lens = require("data-control").Lens
 const Option = require("../Option/index.js")
 const React = require("react")
 

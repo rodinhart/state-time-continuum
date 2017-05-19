@@ -3,8 +3,8 @@
 // Imports.
 const Effect = require("./Effect.js")
 const lang = require("./lang.js")
-const Lens = require("./Lens.js")
-const Task = require("./Task.js")
+const Lens = require("data-control").Lens
+const Task = require("data-control").Task
 
 // data Cause = Cause Action Lens
 const Cause = (action, lens) => ({

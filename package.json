@@ -2,6 +2,7 @@
   "author": "Concentra Analytics",
   "dependencies": {
     "antd": "^2.9.3",
+    "data-control": "git+https://github.com/OrgVue/data-control.git",
     "react": "^15.5.4",
     "react-dom": "^15.5.4"
   },
