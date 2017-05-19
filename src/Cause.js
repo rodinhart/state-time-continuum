@@ -3,11 +3,18 @@
 // Imports.
 const Effect = require("./Effect.js")
 const lang = require("./lang.js")
+const Lens = require("./Lens.js")
 const Task = require("./Task.js")
 
 // data Cause = Cause Action Lens
 const Cause = (action, lens) => ({
   action: action,
+  // apply :: (Cause -> State -> Effect State) -> Cause -> Effect State
+  apply: reduce => state => {
+    const sub = reduce(Cause(action, lens))(Lens.view(lens)(state))
+
+    return Effect(Lens.set(lens)(sub.state)(state), sub.io)
+  },
   lens: lens
 })
 
