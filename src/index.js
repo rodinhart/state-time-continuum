@@ -15,7 +15,7 @@ const render = state => IO(() => reactDom.render(
 ))
 
 // app :: Task String (Effect State)
-const app = Cause.app(render)(App.reduce)({
+const app = Cause.app(render)(App.reduce)(Effect({
   optionA: {
     label: "Option A",
     enabled: false
@@ -31,7 +31,7 @@ const app = Cause.app(render)(App.reduce)({
 
     return r.length ? r.join(" & ") : "None"
   }
-})
+}))
 
 // go
 app.fork(console.log, console.log)

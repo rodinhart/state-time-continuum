@@ -18,8 +18,8 @@ const Cause = (action, lens) => ({
   lens: lens
 })
 
-// app :: (a -> IO ()) -> (Cause -> a -> Effect a (IO ())) -> a -> Task String Effect
-const app = render => reduce => state => {
+// app :: (a -> IO ()) -> (Cause -> a -> Effect a (IO ())) -> Effect a -> Task String (Effect a)
+const app = render => reduce => effect => {
   // loop :: Effect -> Task () Effect
   const loop = effect => Cause.listen(effect.io).map(cause => {
     const newEffect = reduce(cause)(effect.state)
@@ -30,7 +30,7 @@ const app = render => reduce => state => {
     return Effect(newEffect.state, io)
   }).bind(loop)
 
-  return loop(Effect(state, render(state)))
+  return loop(Effect(effect.state, effect.io || render(effect.state)))
 }
 
 var dispatch
