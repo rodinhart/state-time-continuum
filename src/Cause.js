@@ -9,9 +9,9 @@ const Task = require("data-control").Task
 // data Cause = Cause Action Lens
 const Cause = (action, lens) => ({
   action: action,
-  // apply :: (Cause -> State -> Effect State) -> Cause -> Effect State
+  // apply :: (Action -> State -> Effect State) -> Cause -> State -> Effect State
   apply: reduce => state => {
-    const sub = reduce(Cause(action, lens))(Lens.view(lens)(state))
+    const sub = reduce(action)(Lens.view(lens)(state))
 
     return Effect(Lens.set(lens)(sub.state)(state), sub.io)
   },
@@ -36,7 +36,7 @@ const app = render => reduce => effect => {
 var dispatch
 
 // handle :: Lens -> Action -> ()
-const handle = lens => action => dispatch(Cause(action, lens)) // split into handle and handleAt
+const handle = lens => action => dispatch(Cause(action, lens))
 
 // listen :: IO () -> Task () Cause
 const listen = io => Task((rej, res) => {

@@ -2,7 +2,7 @@
 
 // Event -> Action
 const changed = event => ({
-  type: "optionChanged",
+  type: "OptionChanged",
   enabled: event.target.checked
 })
 

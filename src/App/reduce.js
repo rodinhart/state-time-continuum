@@ -2,10 +2,19 @@
 
 // Imports.
 const Effect = require("../Effect.js")
-const Lens = require("data-control").Lens
+const lang = require("../lang.js")
 const Option = require("../Option/index.js")
 
-// reduce :: Cause -> State -> Effect
-module.exports = cause => state => Effect(
-  Lens.over(cause.lens)(Option.reduce(cause.action))(state)
-)
+// reduce :: Action -> State -> Effect State
+module.exports = action => state => {
+  switch (action.type) {
+    case "OptionChanged":
+      return Effect(
+        lang.concat(state)({
+          count: state.count + 1
+        })
+      )
+  }
+
+  return Effect(state)
+}

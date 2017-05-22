@@ -1,8 +1,14 @@
 "use strict"
 
+const Effect = require("../Effect.js")
 const lang = require("../lang.js")
 
-// Action -> State -> State
-const changed = action => state => lang.mixin({ enabled: action.enabled })(state)
+// reduce :: Action -> State -> Effect State
+module.exports = action => state => {
+  switch (action.type) {
+    case "OptionChanged":
+      return Effect(lang.mixin({ enabled: action.enabled })(state))
+  }
 
-module.exports = changed // TODO switch/map
+  return Effect(state)
+}

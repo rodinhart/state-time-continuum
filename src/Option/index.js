@@ -1,6 +1,6 @@
 "use strict"
 
-const Option = require("./Option.jsx")
+const Option = require("./index.jsx")
 Option.reduce = require("./reduce.js")
 
 module.exports = Option

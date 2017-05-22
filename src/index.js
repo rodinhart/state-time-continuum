@@ -5,6 +5,7 @@ const App = require("./App/index.js")
 const Cause = require("./Cause.js")
 const Effect = require("./Effect.js")
 const IO = require("data-control").IO
+const Option = require("./Option/index.jsx")
 const React = require("react")
 const reactDom = require("react-dom")
 
@@ -14,8 +15,14 @@ const render = state => IO(() => reactDom.render(
   document.getElementById("main") /* global document */
 ))
 
+// reduce :: Cause -> State -> Effect State
+const reduce = cause => Effect.combine
+  (App.reduce(cause.action))
+  (cause.apply(Option.reduce))
+
 // app :: Task String (Effect State)
-const app = Cause.app(render)(App.reduce)(Effect({
+const app = Cause.app(render)(reduce)(Effect({
+  count: 0,
   optionA: {
     label: "Option A",
     enabled: false
