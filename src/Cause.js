@@ -33,15 +33,18 @@ const app = render => reduce => effect => {
   return loop(Effect(effect.state, effect.io || render(effect.state)))
 }
 
-var dispatch
+var _dispatch
 
-// handle :: Lens -> Action -> ()
-const handle = lens => action => dispatch(Cause(action, lens))
+// dispatch :: Action -> ()
+const dispatch = action => _dispatch(Cause(action, Lens.Id))
+
+// dispatchAt :: Lens -> Action -> ()
+const dispatchAt = lens => action => _dispatch(Cause(action, lens))
 
 // listen :: IO () -> Task () Cause
 const listen = io => Task((rej, res) => {
-  dispatch = cause => {
-    dispatch = undefined
+  _dispatch = cause => {
+    _dispatch = undefined
     res(cause)
   }
 
@@ -51,6 +54,7 @@ const listen = io => Task((rej, res) => {
 // Exports.
 module.exports = lang.mixin({
   app: app,
-  handle: handle,
+  dispatch: dispatch,
+  dispatchAt: dispatchAt,
   listen: listen
 })(Cause)

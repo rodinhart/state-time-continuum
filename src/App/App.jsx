@@ -17,10 +17,10 @@ module.exports = props => {
   return (
     <Form>
       <Item>
-        <Option onChanged={ Cause.handle(lensA) } state={ state.optionA } />
+        <Option onChanged={ Cause.dispatchAt(lensA) } state={ state.optionA } />
       </Item>
       <Item>
-        <Option onChanged={ Cause.handle(lensB) } state={ state.optionB } />
+        <Option onChanged={ Cause.dispatchAt(lensB) } state={ state.optionB } />
       </Item>
       <Item>
         <span>Selected: { state.selected(state) }</span>
