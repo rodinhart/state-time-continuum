@@ -16,9 +16,10 @@ const render = state => IO(() => reactDom.render(
 ))
 
 // reduce :: Cause -> State -> Effect State
-const reduce = cause => Effect.combine
-  (App.reduce(cause.action))
-  (cause.apply(Option.reduce))
+const reduce = cause => Effect.combine([
+  cause.apply(Option.reduce),
+  App.reduce(cause.action)
+])
 
 // app :: Task String (Effect State)
 const app = Cause.app(render)(reduce)(Effect({

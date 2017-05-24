@@ -8,15 +8,20 @@ const Effect = (state, io) => ({
   state: state
 })
 
-// combine :: (State -> Effect State) -> (State -> Effect State) -> (State -> Effect State)
-const combine = g => f => state => {
-  const x = f(state)
-  const y = g(x.state)
+// combine :: [(State -> Effect State)] -> (State -> Effect State)
+const combine = reducers => initial => {
+  var i, io, state, t
 
-  return Effect(
-    y.state,
-    x.io ? (y.io ? x.io.bind(y.io) : x.io) : y.io
-  )
+  t = reducers[0](initial)
+  state = t.state
+  io = t.io
+  for (i = 1; i < reducers.length; i++) {
+    t = reducers[i](state)
+    state = t.state
+    io = io ? (t.io ? io.bind(() => t.io) : io) : t.io
+  }
+
+  return Effect(state, io)
 }
 
 module.exports = lang.mixin({
