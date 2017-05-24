@@ -23,9 +23,8 @@ const app = render => reduce => effect => {
   // loop :: Effect -> Task () Effect
   const loop = effect => Cause.listen(effect.io).map(cause => {
     const newEffect = reduce(cause)(effect.state)
-    var io = newEffect.io
 
-    io = io ? render(newEffect.state).bind(() => io) : render(newEffect.state)
+    const io = newEffect.io ? render(newEffect.state).bind(() => newEffect.io) : render(newEffect.state)
 
     return Effect(newEffect.state, io)
   }).bind(loop)
