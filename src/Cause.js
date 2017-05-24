@@ -25,7 +25,7 @@ const app = render => reduce => effect => {
     const newEffect = reduce(cause)(effect.state)
     var io = newEffect.io
 
-    io = io ? render(newEffect.state).bin(() => io) : render(newEffect.state)
+    io = io ? render(newEffect.state).bind(() => io) : render(newEffect.state)
 
     return Effect(newEffect.state, io)
   }).bind(loop)
