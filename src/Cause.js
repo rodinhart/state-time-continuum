@@ -35,13 +35,17 @@ const app = render => reduce => effect => {
 var _dispatch
 
 // dispatch :: Action -> ()
-const dispatch = action => _dispatch(Cause(action, Lens.Id))
+const dispatch = action => dispatchAt(Lens.id)(action)
 
 // dispatchAt :: Lens -> Action -> ()
-const dispatchAt = lens => action => _dispatch(Cause(action, lens))
+const dispatchAt = lens => action => {
+  if (!_dispatch) throw new Error("Dispatch no longer set, someone was listening...")
+  _dispatch(Cause(action, lens))
+}
 
 // listen :: IO () -> Task () Cause
 const listen = io => Task((rej, res) => {
+  if (_dispatch) throw new Error("Dispatch already set, someone is listening...")
   _dispatch = cause => {
     _dispatch = undefined
     res(cause)
