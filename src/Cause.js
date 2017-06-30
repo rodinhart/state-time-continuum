@@ -21,13 +21,18 @@ const Cause = (action, lens) => ({
 // app :: (a -> IO ()) -> (Cause -> a -> Effect a (IO ())) -> Effect a -> Task String (Effect a)
 const app = render => reduce => effect => {
   // loop :: Effect -> Task () Effect
-  const loop = effect => Cause.listen(effect.io).map(cause => {
-    const newEffect = reduce(cause)(effect.state)
+  const loop = effect =>
+    Cause.listen(effect.io)
+      .map(cause => {
+        const newEffect = reduce(cause)(effect.state)
 
-    const io = newEffect.io ? render(newEffect.state).bind(() => newEffect.io) : render(newEffect.state)
+        const io = newEffect.io
+          ? render(newEffect.state).bind(() => newEffect.io)
+          : render(newEffect.state)
 
-    return Effect(newEffect.state, io)
-  }).bind(loop)
+        return Effect(newEffect.state, io)
+      })
+      .bind(loop)
 
   return loop(Effect(effect.state, effect.io || render(effect.state)))
 }
@@ -39,20 +44,26 @@ const dispatch = action => dispatchAt(Lens.id)(action)
 
 // dispatchAt :: Lens -> Action -> ()
 const dispatchAt = lens => action => {
-  if (!_dispatch) throw new Error("Dispatch no longer set, someone was listening...")
+  if (!_dispatch)
+    throw new Error(
+      "Dispatch no longer set, someone was listening, action lost: " +
+        action.type
+    )
   _dispatch(Cause(action, lens))
 }
 
 // listen :: IO () -> Task () Cause
-const listen = io => Task((rej, res) => {
-  if (_dispatch) throw new Error("Dispatch already set, someone is listening...")
-  _dispatch = cause => {
-    _dispatch = undefined
-    res(cause)
-  }
+const listen = io =>
+  Task((rej, res) => {
+    if (_dispatch)
+      throw new Error("Dispatch already set, someone is listening...")
+    _dispatch = cause => {
+      _dispatch = undefined
+      res(cause)
+    }
 
-  if (io) io.unsafe()
-})
+    if (io) io.unsafe()
+  })
 
 // Exports.
 module.exports = lang.mixin({
