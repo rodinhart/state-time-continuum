@@ -40,7 +40,7 @@ const app = render => reduce => effect => {
 var _dispatch
 
 // dispatch :: Action -> ()
-const dispatch = action => dispatchAt(Lens.id)(action)
+const dispatch = action => dispatchAt(Lens.Id)(action)
 
 // dispatchAt :: Lens -> Action -> ()
 const dispatchAt = lens => action => {
