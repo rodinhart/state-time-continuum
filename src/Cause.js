@@ -63,8 +63,8 @@ const listen = io =>
       res(cause)
     }
 
-    if (io) io.unsafe()
     console.log(_id, "I'm listening...")
+    if (io) io.unsafe()
   })
 
 // Exports.
