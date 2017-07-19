@@ -46,8 +46,7 @@ const dispatch = action => dispatchAt(Lens.Id)(action)
 const dispatchAt = lens => action => {
   if (!_dispatch)
     throw new Error(
-      "Dispatch no longer set, someone was listening, action lost: " +
-        action.type
+      "Dispatch no longer set, nobody is listening, action lost: " + action.type
     )
   _dispatch(Cause(action, lens))
 }
