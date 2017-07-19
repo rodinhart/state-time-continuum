@@ -59,11 +59,11 @@ const listen = io =>
       throw new Error("Dispatch already set, someone is listening...")
     _dispatch = cause => {
       _dispatch = undefined
-      console.log(_id, "I heard", cause.action)
+      // console.log(_id, "I heard", cause.action)
       res(cause)
     }
 
-    console.log(_id, "I'm listening...")
+    // console.log(_id, "I'm listening...")
     if (io) io.unsafe()
   })
 
