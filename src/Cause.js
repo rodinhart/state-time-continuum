@@ -38,6 +38,7 @@ const app = render => reduce => effect => {
 }
 
 var _dispatch
+const _id = Math.random()
 
 // dispatch :: Action -> ()
 const dispatch = action => dispatchAt(Lens.Id)(action)
@@ -58,12 +59,12 @@ const listen = io =>
       throw new Error("Dispatch already set, someone is listening...")
     _dispatch = cause => {
       _dispatch = undefined
-      console.log("I heard", cause.action)
+      console.log(_id, "I heard", cause.action)
       res(cause)
     }
 
     if (io) io.unsafe()
-    console.log("I'm listening...")
+    console.log(_id, "I'm listening...")
   })
 
 // Exports.
