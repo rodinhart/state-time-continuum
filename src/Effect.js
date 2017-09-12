@@ -2,7 +2,7 @@
 
 const lang = require("./lang.js")
 
-// data Effect a b = Effect a (Reaction a b)
+// data Effect s a = Effect s (Reaction s b)
 const Effect = (state, reaction) => ({
   state: state,
   reaction: reaction

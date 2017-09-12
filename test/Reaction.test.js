@@ -1,34 +1,29 @@
 const assert = require("assert")
 const Reaction = require("../src/Reaction.js")
 
-const run = (m, e) => {
-  let r
-
-  m.run(x => (r = x), e)
-
-  return r
-}
-
 describe("Reaction", function() {
   describe("#of", function() {
     it("should act as the unit of Monad", function() {
-      const m = Reaction.of(42)
+      let r
 
-      assert.strictEqual(run(m, 100), 42)
+      const m = Reaction(e => (r = e))
+      m.run(32)
+
+      assert.strictEqual(r, 32)
     })
   })
 
   describe("#bind", function() {
     it("should continue the calculation", function() {
-      const m = Reaction.of(3).bind(x => Reaction.of(x * x))
+      let r = []
 
-      assert.strictEqual(run(m, 100), 9)
-    })
-  })
+      const m = Reaction(e => r.push(e)).bind(() =>
+        Reaction(e => r.push(e * e))
+      )
 
-  describe("#get", function() {
-    it("should get the env", function() {
-      assert.strictEqual(run(Reaction.get, 100), 100)
+      m.run(3)
+
+      assert.deepStrictEqual(r, [3, 9])
     })
   })
 })

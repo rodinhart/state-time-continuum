@@ -5,7 +5,7 @@ const Effect = require("../Effect.js")
 const lang = require("../lang.js")
 const Option = require("../Option/index.js")
 
-// reduce :: Action -> State -> Effect State
+// reduce :: Action -> State -> Effect State a
 module.exports = action => state => {
   switch (action.type) {
     case "OptionChanged":

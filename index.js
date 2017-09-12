@@ -2,6 +2,7 @@
 
 // Exports.
 module.exports = {
-  Cause: require("./src/Cause.js"),
-  Effect: require("./src/Effect.js")
+  ActionBus: require("./src/ActionBus.js"),
+  Effect: require("./src/Effect.js"),
+  Reaction: require("./src/Reaction.js")
 }

@@ -1,30 +1,52 @@
 "use strict"
 
 // Imports.
+const ActionBus = require("./ActionBus.js")
 const App = require("./App/index.js")
-const Cause = require("./Cause.js")
 const Effect = require("./Effect.js")
-const IO = require("data-control").IO
 const Option = require("./Option/index.jsx")
 const React = require("react")
+const Reaction = require("./Reaction.js")
 const reactDom = require("react-dom")
 
-// render :: State -> IO ()
-const render = state =>
-  console.log(state) ||
-  IO(() =>
-    reactDom.render(
-      React.createElement(App, { state: state }),
-      document.getElementById("main") /* global document */
-    )
+const bus = ActionBus()
+
+// render :: Reaction State a
+const render = Reaction(state => {
+  reactDom.render(
+    React.createElement(App, { state: state, dispatch: bus.dispatch }),
+    document.getElementById("main") /* global document */
   )
+})
 
-// reduce :: Cause -> State -> Effect State
-const reduce = cause =>
-  Effect.combine([cause.apply(Option.reduce), App.reduce(cause.action)])
+// reduce :: Action -> State -> Effect State a
+const reduce = action =>
+  Effect.combine([
+    state => {
+      let e2
+      if (action.id === "A") {
+        e2 = Option.reduce(action)(state.optionA)
+        return Effect(
+          Object.assign({}, state, {
+            optionA: e2.state
+          }),
+          e2.reduction
+        )
+      } else if (action.id === "B") {
+        e2 = Option.reduce(action)(state.optionB)
+        return Effect(
+          Object.assign({}, state, {
+            optionB: e2.state
+          }),
+          e2.reduction
+        )
+      }
+    },
+    App.reduce(action)
+  ])
 
-// app :: Task String (Effect State)
-const app = Cause.app(render)(reduce)(
+// app :: Task String (Effect State a)
+const app = Reaction.app(render)(bus)(reduce)(
   Effect({
     count: 0,
     optionA: {
