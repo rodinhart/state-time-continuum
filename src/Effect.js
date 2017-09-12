@@ -2,26 +2,30 @@
 
 const lang = require("./lang.js")
 
-// data Effect a = Effect a (IO ())
-const Effect = (state, io) => ({
-  io: io,
-  state: state
+// data Effect a b = Effect a (Reaction a b)
+const Effect = (state, reaction) => ({
+  state: state,
+  reaction: reaction
 })
 
-// combine :: [(State -> Effect State)] -> (State -> Effect State)
+// combine :: [(State -> Effect State Action)] -> (State -> Effect State Action)
 const combine = reducers => initial => {
-  var i, io, state, t
+  var i, reaction, state, t
+
+  if (reducers.length === 0) return Effect(initial)
 
   t = reducers[0](initial)
   state = t.state
-  io = t.io
+  reaction = t.reaction
   for (i = 1; i < reducers.length; i++) {
     t = reducers[i](state)
     state = t.state
-    io = io ? (t.io ? io.bind(() => t.io) : io) : t.io
+    reaction = reaction
+      ? t.reaction ? reaction.bind(() => t.reaction) : reaction
+      : t.reaction
   }
 
-  return Effect(state, io)
+  return Effect(state, reaction)
 }
 
 module.exports = lang.mixin({
