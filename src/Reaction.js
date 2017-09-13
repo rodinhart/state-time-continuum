@@ -2,12 +2,12 @@ const Effect = require("./Effect.js")
 const lang = require("./lang.js")
 const Task = require("data-control").Task
 
-// data Reaction e a = Reaction (e -> ())
+// data Reaction e a = Reaction ((e, (a -> ())) -> ())
 const Reaction = run => ({
   run: run,
 
   // bind :: (a -> Reaction e b) -> Reaction e a -> Reaction e b
-  bind: f => Reaction(e => f(run(e)).run(e))
+  bind: f => Reaction((e, a) => f(run(e, a)).run(e, a))
 })
 
 // app :: Reaction s a -> ActionBus -> (a -> s -> Effect s a) -> Effect s a -> Task String (Effect s a)
@@ -30,7 +30,7 @@ const app = render => bus => reduce => effect => {
 }
 
 // of :: a -> Reaction e a
-const of = _ => Reaction(e => {})
+const of = _ => Reaction(e => { })
 
 module.exports = lang.mixin({
   app: app,
