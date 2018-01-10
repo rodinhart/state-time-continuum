@@ -4,6 +4,7 @@ const lang = require("./lang.js")
 
 // data Effect s a = Effect s (Reaction s b)
 const Effect = (state, reaction) => ({
+  type: "Effect",
   state: state,
   reaction: reaction
 })
@@ -28,6 +29,10 @@ const combine = reducers => initial => {
   return Effect(state, reaction)
 }
 
+// is :: a -> Bool
+const is = x => x && x.hasOwnProperty("type") && x.type === "Effect"
+
 module.exports = lang.mixin({
-  combine: combine
+  combine: combine,
+  is: is
 })(Effect)
