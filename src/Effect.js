@@ -22,7 +22,7 @@ const combine = reducers => initial => {
     t = reducers[i](state)
     state = t.state
     reaction = reaction
-      ? t.reaction ? reaction.bind(() => t.reaction) : reaction
+      ? t.reaction ? reaction.bind((r => () => r)(t.reaction)) : reaction
       : t.reaction
   }
 
