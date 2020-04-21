@@ -13,7 +13,7 @@
     "babel-preset-react": "^6.23.0",
     "copy-webpack-plugin": "^4.0.1",
     "data-control": "git+https://github.com/OrgVue/data-control.git",
-    "mocha": "^6.0.2",
+    "mocha": "^6.2.3",
     "raw-loader": "^0.5.1",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
